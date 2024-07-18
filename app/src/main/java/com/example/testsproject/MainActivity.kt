@@ -1,5 +1,6 @@
 package com.example.testsproject
 
+import android.content.Intent
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.text.Layout
@@ -15,16 +16,19 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -43,11 +47,28 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-
+            val corScope= rememberCoroutineScope()
+            var int by rememberSaveable {
+                mutableStateOf(false)
+            }
+            val intent=Intent(this,RegisterActivity::class.java)
+//            Button(onClick = { val intent = Intent(this, RegisterActivity::class.java)
+//            startActivity(intent)}) {
+//                Text(text = "TEST")
+//            }
             Column(modifier = Modifier.fillMaxSize()){
                 animStickman(0.8f)
                 Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                     LoadingAnim()
+                    LaunchedEffect(key1="") {
+                        corScope.launch {
+                            delay(3000)
+                            int=!int
+                        }
+                    }
+                    if (int){
+                        startActivity(intent)
+                    }
                 }
             }
         }
@@ -72,6 +93,7 @@ fun animStickman(size:Float){
         modifier = Modifier
             .fillMaxWidth(1f)
             .fillMaxHeight(size)
+
     )
 }
 
@@ -79,10 +101,10 @@ fun animStickman(size:Float){
 @Composable
 fun LoadingAnim(maxDot: Int =3) {
     val corScope = rememberCoroutineScope()
+    val context= LocalContext.current
     var dots = rememberSaveable {
         mutableIntStateOf(1)
     }
-
     LaunchedEffect(key1 = dots.intValue) {
         corScope.launch {
             delay(500)
@@ -93,15 +115,14 @@ fun LoadingAnim(maxDot: Int =3) {
             }
         }
     }
-
     Row(modifier = Modifier) {
         Text(text = "Loading")
         repeat(dots.intValue) {
             Text(text = ".")
-
             Log.i("DOT", dots.intValue.toString())
-
         }
 
     }
+
+
 }
