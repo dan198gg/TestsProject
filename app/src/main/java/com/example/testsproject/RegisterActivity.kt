@@ -30,12 +30,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.testsproject.ui.theme.TestsProjectTheme
+import com.google.firebase.Firebase
+import com.google.firebase.FirebaseApp
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 
 class RegisterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+
             Text(text = "Регистрация", fontSize = 50.sp, modifier = Modifier.padding(30.dp))
             UserAndPassvord()
 
@@ -46,6 +51,7 @@ class RegisterActivity : ComponentActivity() {
 
 @Composable
 fun UserAndPassvord(){
+
     val context= LocalContext.current
     Column (
         verticalArrangement = Arrangement.Center,
@@ -58,7 +64,12 @@ fun UserAndPassvord(){
         var userPassword by remember { mutableStateOf("")}
         TextField(value = userLogin, onValueChange ={userLogin=it}, label = { Text(text = "Введите логин")})
         TextField(value = userPassword, onValueChange ={userPassword=it}, label = { Text(text = "Введите пароль")}, modifier = Modifier.padding(0.dp,50.dp))
-        Button(onClick = { Toast.makeText(context, "В разработке", Toast.LENGTH_SHORT).show()}) {
+        Button(onClick = {
+            val storage=Firebase.firestore
+            storage.collection("Users").document().set{
+                User(login = userLogin, password = userPassword.toInt())
+            }
+        }) {
             Text(text = "Зарегистрироваться")
         }
     }
