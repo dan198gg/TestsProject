@@ -39,8 +39,6 @@ import coil.compose.rememberAsyncImagePainter
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import com.example.testsproject.ui.theme.TestsProjectTheme
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -49,10 +47,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val fs=Firebase.firestore
-            fs.collection("Users").document().set{
-                User("daniil","12345")
-            }
             val corScope= rememberCoroutineScope()
             var int by rememberSaveable {
                 mutableStateOf(false)
