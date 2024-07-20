@@ -49,6 +49,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+
             val fs=Firebase.firestore
             fs.collection("Users").document().set{
                 User("daniil","12345")
