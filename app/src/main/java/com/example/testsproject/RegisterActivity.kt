@@ -30,6 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.testsproject.ui.theme.TestsProjectTheme
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 class RegisterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +60,12 @@ fun UserAndPassvord(){
         var userPassword by remember { mutableStateOf("")}
         TextField(value = userLogin, onValueChange ={userLogin=it}, label = { Text(text = "Введите логин")})
         TextField(value = userPassword, onValueChange ={userPassword=it}, label = { Text(text = "Введите пароль")}, modifier = Modifier.padding(0.dp,50.dp))
-        Button(onClick = { Toast.makeText(context, "В разработке", Toast.LENGTH_SHORT).show()}) {
+        Button(onClick = {
+            val fs= Firebase.firestore
+            fs.collection("Users").document().set(
+                User(userLogin,userPassword)
+            )
+        }) {
             Text(text = "Зарегистрироваться")
         }
     }

@@ -50,10 +50,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
-            val fs=Firebase.firestore
-            fs.collection("Users").document().set{
-                User("daniil","12345")
-            }
             val corScope= rememberCoroutineScope()
             var int by rememberSaveable {
                 mutableStateOf(false)
